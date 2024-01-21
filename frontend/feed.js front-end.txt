@@ -1,0 +1,58 @@
+// src/components/Feed.js
+import React, { useState, useEffect } from 'react';
+
+const Feed = ({ user, socket }) => {
+  const [posts, setPosts] = useState([]);
+  const [newPostContent, setNewPostContent] = useState('');
+
+  useEffect(() => {
+    socket.on('newPost', (newPost) => {
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
+    });
+  }, [socket]);
+
+  const handlePostSubmit = (e) => {
+    e.preventDefault();
+    if (newPostContent.trim() !== '') {
+      const newPost = {
+        id: new Date().getTime(),
+        content: newPostContent,
+        user: user,
+      };
+      socket.emit('createPost', newPost);
+      setNewPostContent('');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Welcome, {user.username}!</h2>
+      <form onSubmit={handlePostSubmit}>
+        <textarea
+          placeholder="What's on your mind?"
+          value={newPostContent}
+          onChange={(e) => setNewPostContent(e.target.value)}
+        ></textarea>
+        <button type="submit">Post</button>
+      </form>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <strong>{post.user.username}:</strong> {post.content}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Login = () => {
+  return (
+    <div>
+      <h2>Please log in</h2>
+      {/* Add your login form or authentication component here */}
+    </div>
+  );
+};
+
+export default Feed;

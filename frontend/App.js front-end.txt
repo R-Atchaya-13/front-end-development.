@@ -1,0 +1,24 @@
+// src/components/App.js
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000'); // Replace with your server URL
+
+const App = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Simulate user authentication (replace with your actual authentication logic)
+    const loggedInUser = { id: 1, username: 'JohnDoe' };
+    setUser(loggedInUser);
+  }, []);
+
+  return (
+    <div>
+      <h1>Social Media App</h1>
+      {user ? <Feed user={user} socket={socket} /> : <Login />}
+    </div>
+  );
+};
+
+export default App;

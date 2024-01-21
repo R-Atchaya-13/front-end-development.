@@ -1,0 +1,9 @@
+CREATE DATABASE social_media_db;
+
+USE social_media_db;
+
+CREATE TABLE posts (
+  id INT PRIMARY KEY,
+  content TEXT,
+  userId INT
+);
